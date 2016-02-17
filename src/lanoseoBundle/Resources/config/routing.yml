@@ -1,0 +1,19 @@
+lanoseo_homepage:
+    path:     /
+    defaults: { _controller: lanoseoBundle:Default:index }
+
+contact:
+    path: /kontakt
+    defaults: { _controller: lanoseoBundle:Default:contact }
+
+login:
+    path: /login
+    defaults: { _controller: lanoseoBundle:Default:login }
+
+register:
+    path: /register
+    defaults: { _controller: lanoseoBundle:Default:register }
+
+carlist:
+    path: /lista
+    defaults: { _controller: lanoseoBundle:Default:carlist }
