@@ -1,0 +1,53 @@
+<?php
+
+namespace lanoseoBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Customers
+ *
+ * @ORM\Table(name="customers", indexes={@ORM\Index(name="customer_id", columns={"customer_id"})})
+ * @ORM\Entity
+ */
+class Customers
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="customer_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $customerId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customer_name", type="string", length=50, nullable=false)
+     */
+    private $customerName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customer_surname", type="string", length=50, nullable=false)
+     */
+    private $customerSurname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customer_email", type="string", length=100, nullable=false)
+     */
+    private $customerEmail;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="customer_password", type="text", length=65535, nullable=false)
+     */
+    private $customerPassword;
+
+
+}

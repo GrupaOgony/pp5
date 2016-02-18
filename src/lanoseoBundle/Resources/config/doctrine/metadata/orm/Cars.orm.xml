@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Cars" table="cars">
+    <indexes>
+      <index name="car_id" columns="car_id"/>
+    </indexes>
+    <id name="carId" type="integer" column="car_id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="carName" type="text" column="car_name" length="65535" nullable="false"/>
+    <field name="carSegment" type="string" column="car_segment" length="5" nullable="false"/>
+    <field name="carPrice" type="float" column="car_price" precision="10" scale="0" nullable="false"/>
+    <field name="carImage" type="text" column="car_image" length="65535" nullable="false"/>
+  </entity>
+</doctrine-mapping>

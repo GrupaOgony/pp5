@@ -87,94 +87,97 @@
         
         <div class="container" style="margin-bottom: 100px;">
             <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="thumbnail">
-                        <img src="{{ asset('bundles/lanoseo/images/cars/500.jpg') }}" alt="...">
-                        <div class="caption text-center">
-                            <h3>Fiat 500</h3>
-                            <p>Segment: A</p>
-                            <p>Cena za dzień: 69 zł</p>
-                            <p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>
+                {% for car in ~cars~ %}
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="thumbnail">
+                            <img src="{{ asset('bundles/lanoseo/images/cars/500.jpg') }}" alt="...">
+                            <div class="caption text-center">
+                                <h3>Fiat 500</h3>
+                                <p>Segment: A</p>
+                                <p>Cena za dzień: 69 zł</p>
+                                <p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="thumbnail">
-                        <img src="{{ asset('bundles/lanoseo/images/cars/swift.jpg') }}" alt="...">
-                        <div class="caption text-center">
-                            <h3>Suzuki Swift</h3>
-                            <p>Segment: B</p>
-                            <p>Cena za dzień: 89 zł</p>
-                            <p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="thumbnail">
-                        <img src="{{ asset('bundles/lanoseo/images/cars/ceed.jpg') }}" alt="...">
-                        <div class="caption text-center">
-                            <h3>Kia Cee'd</h3>
-                            <p>Segment: C</p>
-                            <p>Cena za dzień: 109 zł</p>
-                            <p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="thumbnail">
-                        <img src="{{ asset('bundles/lanoseo/images/cars/superb.jpg') }}" alt="...">
-                        <div class="caption text-center">
-                            <h3>Skoda Superb</h3>
-                            <p>Segment: D</p>
-                            <p>Cena za dzień: 149 zł</p>
-                            <p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="thumbnail">
-                        <img src="{{ asset('bundles/lanoseo/images/cars/forester.jpg') }}" alt="...">
-                        <div class="caption text-center">
-                            <h3>Subaru Forester</h3>
-                            <p>Segment: SUV</p>
-                            <p>Cena za dzień: 179 zł</p>
-                            <p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="thumbnail">
-                        <img src="{{ asset('bundles/lanoseo/images/cars/outlander.jpg') }}" alt="...">
-                        <div class="caption text-center">
-                            <h3>Mitsubishi Outlander</h3>
-                            <p>Segment: SUV</p>
-                            <p>Cena za dzień: 179 zł</p>
-                            <p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="thumbnail">
-                        <img src="{{ asset('bundles/lanoseo/images/cars/x5.jpg') }}" alt="...">
-                        <div class="caption text-center">
-                            <h3>BMW X5</h3>
-                            <p>Segment: SUV</p>
-                            <p>Cena za dzień: 249 zł</p>
-                            <p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="thumbnail">
-                        <img src="{{ asset('bundles/lanoseo/images/cars/brz.jpg') }}" alt="...">
-                        <div class="caption text-center">
-                            <h3>Subaru BRZ</h3>
-                            <p>Segment: Sport</p>
-                            <p>Cena za dzień: 199 zł</p>
-                            <p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
+
+                {#<div class="col-lg-3 col-md-6 col-sm-6">#}
+                    {#<div class="thumbnail">#}
+                        {#<img src="{{ asset('bundles/lanoseo/images/cars/swift.jpg') }}" alt="...">#}
+                        {#<div class="caption text-center">#}
+                            {#<h3>Suzuki Swift</h3>#}
+                            {#<p>Segment: B</p>#}
+                            {#<p>Cena za dzień: 89 zł</p>#}
+                            {#<p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="col-lg-3 col-md-6 col-sm-6">#}
+                    {#<div class="thumbnail">#}
+                        {#<img src="{{ asset('bundles/lanoseo/images/cars/ceed.jpg') }}" alt="...">#}
+                        {#<div class="caption text-center">#}
+                            {#<h3>Kia Cee'd</h3>#}
+                            {#<p>Segment: C</p>#}
+                            {#<p>Cena za dzień: 109 zł</p>#}
+                            {#<p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="col-lg-3 col-md-6 col-sm-6">#}
+                    {#<div class="thumbnail">#}
+                        {#<img src="{{ asset('bundles/lanoseo/images/cars/superb.jpg') }}" alt="...">#}
+                        {#<div class="caption text-center">#}
+                            {#<h3>Skoda Superb</h3>#}
+                            {#<p>Segment: D</p>#}
+                            {#<p>Cena za dzień: 149 zł</p>#}
+                            {#<p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="col-lg-3 col-md-6 col-sm-6">#}
+                    {#<div class="thumbnail">#}
+                        {#<img src="{{ asset('bundles/lanoseo/images/cars/forester.jpg') }}" alt="...">#}
+                        {#<div class="caption text-center">#}
+                            {#<h3>Subaru Forester</h3>#}
+                            {#<p>Segment: SUV</p>#}
+                            {#<p>Cena za dzień: 179 zł</p>#}
+                            {#<p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="col-lg-3 col-md-6 col-sm-6">#}
+                    {#<div class="thumbnail">#}
+                        {#<img src="{{ asset('bundles/lanoseo/images/cars/outlander.jpg') }}" alt="...">#}
+                        {#<div class="caption text-center">#}
+                            {#<h3>Mitsubishi Outlander</h3>#}
+                            {#<p>Segment: SUV</p>#}
+                            {#<p>Cena za dzień: 179 zł</p>#}
+                            {#<p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="col-lg-3 col-md-6 col-sm-6">#}
+                    {#<div class="thumbnail">#}
+                        {#<img src="{{ asset('bundles/lanoseo/images/cars/x5.jpg') }}" alt="...">#}
+                        {#<div class="caption text-center">#}
+                            {#<h3>BMW X5</h3>#}
+                            {#<p>Segment: SUV</p>#}
+                            {#<p>Cena za dzień: 249 zł</p>#}
+                            {#<p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
+                {#<div class="col-lg-3 col-md-6 col-sm-6">#}
+                    {#<div class="thumbnail">#}
+                        {#<img src="{{ asset('bundles/lanoseo/images/cars/brz.jpg') }}" alt="...">#}
+                        {#<div class="caption text-center">#}
+                            {#<h3>Subaru BRZ</h3>#}
+                            {#<p>Segment: Sport</p>#}
+                            {#<p>Cena za dzień: 199 zł</p>#}
+                            {#<p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>#}
+                        {#</div>#}
+                    {#</div>#}
+                {#</div>#}
             </div>
         </div>
 

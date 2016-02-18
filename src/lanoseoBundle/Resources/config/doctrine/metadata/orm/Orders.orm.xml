@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Orders" table="orders">
+    <indexes>
+      <index name="order_id" columns="order_id"/>
+      <index name="car_id" columns="car_id"/>
+      <index name="car_id_2" columns="car_id"/>
+      <index name="car_id_3" columns="car_id"/>
+      <index name="car_id_4" columns="car_id"/>
+      <index name="customer_id" columns="customer_id"/>
+    </indexes>
+    <id name="orderId" type="integer" column="order_id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="orderDate" type="date" column="order_date" nullable="false"/>
+    <field name="orderPayment" type="boolean" column="order_payment" nullable="false"/>
+    <field name="orderFrom" type="datetime" column="order_from" nullable="false"/>
+    <field name="orderTo" type="datetime" column="order_to" nullable="false"/>
+    <field name="orderPrice" type="float" column="order_price" precision="10" scale="0" nullable="false"/>
+    <many-to-one field="car" target-entity="Cars">
+      <join-columns>
+        <join-column name="car_id" referenced-column-name="car_id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="customer" target-entity="Customers">
+      <join-columns>
+        <join-column name="customer_id" referenced-column-name="customer_id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

@@ -33,7 +33,11 @@ class DefaultController extends Controller
     }
     public function carlistAction()
     {
-        return $this->render('lanoseoBundle:Default:carlist.html.twig');
+        $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
+
+        $cars = $repository->findAll();
+
+        return $this->render('lanoseoBundle:Default:carlist.html.twig', $cars);
     }
 
 
