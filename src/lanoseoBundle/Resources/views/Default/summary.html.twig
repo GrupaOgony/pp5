@@ -68,16 +68,20 @@
             </div>
         </nav>
 
-
+        <div class="container">
+            <div class="row">
+                <div class="alert alert-success text-center" role="alert">Twoja rezerwacja przebiegła pomyślnie. Dokonaj płatności aby potwierdzić rezerwację.</div>
+            </div>
+        </div>
         <div class="container" style="margin-bottom: 100px;">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Szczegóły</h3>
+                    <h3 class="panel-title">Szczegóły dokonanej rezerwacji</h3>
                 </div>
                 <div class="panel-body">
                     <div class="row visible-lg">
                         <div class="col-lg-5">
-                            <img src="{{ asset('bundles/lanoseo/images/cars/500.jpg') }}" alt="Fiat 500" />
+                            <img src="{{ asset('bundles/lanoseo/images/cars/' ~ car[0].getCarImage) }}" alt="Fiat 500" />
                         </div>
                         <div class="col-lg-4">
                             <br/>
@@ -85,6 +89,13 @@
                             <br/>Szymon Pogon<br><br>
                             <strong>Miejsce odbioru</strong><br>
                             {{ place }}<br><br>
+                            <strong>ID zamówienia</strong><br>
+                            {#{% for item in result %}#}
+
+                                {{ result[0].order_id }}
+
+                            {#{% endfor %}#}
+                            <br><br>
                             <strong>Dane zamówienia</strong><br/>
                             Od: {{ fromDate }}<br/>
                             Do: {{ toDate }}<br/><br/>
