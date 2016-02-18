@@ -2,18 +2,26 @@
 
 namespace lanoseoBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
     public function indexAction()
     {
+        $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
+        $mostlyOrderedCars = $this->getDoctrine()->getRepository('lanoseoBundle:Orders');
+        $cars = $repository->findAll();
+        $orders = $mostlyOrderedCars->findAll();
+
+
+
+
         return $this->render('lanoseoBundle:Default:index.html.twig', array(
 
-            "car_company" => "Mitsubishi Outlander",
-            "car_description" => "bardzo długi opis z bazy... bardzo długi opis z bazy... bardzo długi opis z bazy... bardzo długi opis z bazy... bardzo długi opis z bazy... bardzo długi opis z bazy... bardzo długi opis z bazy...",
-            "car_image_name" => "outlander",
-
+            'orders' => $orders,
+            'cars' => $cars,
 
         ));
     }
@@ -37,7 +45,60 @@ class DefaultController extends Controller
 
         $cars = $repository->findAll();
 
-        return $this->render('lanoseoBundle:Default:carlist.html.twig', $cars);
+        return $this->render('lanoseoBundle:Default:carlist.html.twig', array(
+
+            'cars' => $cars,
+
+        ));
+    }
+
+    public function errorAction()
+    {
+        return $this->render('lanoseoBundle:Default:error.html.twig');
+    }
+
+    public function placeOrderAction(Request $carRequest)
+    {
+        $carId = $carRequest->get('carId');
+        $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
+
+        $car = $repository->findBy(array('carId' => $carId ));
+
+        return $this->render('lanoseoBundle:Default:place_order.html.twig', array(
+
+            'car' => $car,
+
+        ));
+    }
+
+    public function rejectPaymentAction()
+    {
+        return $this->render('lanoseoBundle:Default:reject_payment.html.twig');
+    }
+
+    public function successPaymentAction()
+    {
+        return $this->render('lanoseoBundle:Default:success_payment.html.twig');
+    }
+
+    public function summaryAction(Request $request)
+    {
+        $place = $request ->request->get('place');
+        $fromDate = $request ->request->get('fromDate');
+        $toDate = $request ->request->get('toDate');
+
+        $carId = $request->get('carId');
+        $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
+
+        $car = $repository->findBy(array('carId' => $carId ));
+        return $this->render('lanoseoBundle:Default:summary.html.twig', array(
+
+            'place' => $place,
+            'fromDate' => $fromDate,
+            'toDate' => $toDate,
+            'car' => $car,
+
+        ));
     }
 
 

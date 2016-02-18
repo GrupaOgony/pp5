@@ -17,3 +17,23 @@ register:
 carlist:
     path: /lista
     defaults: { _controller: lanoseoBundle:Default:carlist }
+
+error:
+    path: /error
+    defaults: { _controller: lanoseoBundle:Default:error }
+
+place_order:
+    path: /place_order/{carId}
+    defaults: { _controller: lanoseoBundle:Default:placeOrder }
+
+reject_payment:
+    path: /reject_payment
+    defaults: { _controller: lanoseoBundle:Default:rejectPayment }
+
+success_payment:
+    path: /success_payment
+    defaults: { _controller: lanoseoBundle:Default:successPayment }
+
+summary:
+    path: /summary/{carId}
+    defaults: { _controller: lanoseoBundle:Default:summary }

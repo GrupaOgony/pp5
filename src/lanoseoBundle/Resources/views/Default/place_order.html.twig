@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Lanoseo - i ty możesz mieć swojego wymarzonego Lanosa!</title>
+
+
+        {% block stylesheets %}
+            <link href="{{ asset('bundles/lanoseo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('bundles/lanoseo/css/mystyle.css')}}" rel="stylesheet" type="text/css">
+            <link href="{{ asset('bundles/lanoseo/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+        {% endblock %}
+
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+    <nav class="navbar navbar-default navbar-fixed-top visible-lg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <a href="#"><img src="{{ asset('bundles/lanoseo/images/social_icons/fb48.png') }}" alt="Facebook" /></a>
+                    <a href="#"><img src="{{ asset('bundles/lanoseo/images/social_icons/twitter48.png') }}" alt="Twitter" /></a>
+                    <a href="#"><img src="{{ asset('bundles/lanoseo/images/social_icons/gplus48.png') }}" alt="GPlus" /></a>
+                    <a href="#"><img src="{{ asset('bundles/lanoseo/images/social_icons/yt48.png') }}" alt="YouTube" /></a>
+                </div>
+                <div class="col-lg-6 text-right">
+                    <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/login" class="btn btn-default navbar-btn" role="button">Zaloguj się</a>
+                    <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/register" class="btn btn-danger navbar-btn" role="button">Zarejestruj się</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+        <div class="jumbotron visible-lg">
+            <div class="container">
+                <h1><mark>Marzenia się spełniają!</mark></h1>
+                <p><mark>Już tylko kilka kliknięć dzieli Cię od wypożyczenia najlepszego samochodu wszech czasów.</mark></p>
+                <p><a class="btn btn-primary btn-lg" href="#" role="button">Już od 199 zł/doba &raquo;</a></p>
+            </div>
+        </div>
+
+    <nav class = "navbar navbar-default" style="border-radius:0px;" role = "navigation">
+
+        <div class = "navbar-header">
+            <button type = "button" class = "navbar-toggle"
+                    data-toggle = "collapse" data-target = "#example-navbar-collapse">
+                <span class = "sr-only">Toggle navigation</span>
+                <span class = "icon-bar"></span>
+                <span class = "icon-bar"></span>
+                <span class = "icon-bar"></span>
+            </button>
+
+            <a class = "navbar-brand hidden-lg" href = "#">Lanoseo</a>
+        </div>
+        <div class = "collapse navbar-collapse" id = "example-navbar-collapse">
+            <ul class = "nav navbar-nav">
+                <li><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php">Strona główna</a></li>
+                <li><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista">Oferta</a></li>
+                <li><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/kontakt">Kontakt</a></li>
+                <li class="hidden-lg"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/login">Zaloguj się</a></li>
+                <li class="hidden-lg"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/register">Zarejestruj się</a></li>
+            </ul>
+        </div>
+    </nav>
+        
+        <div class="container" style="margin-bottom: 100px;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Krok 1/3</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row visible-lg">
+                        <div class="col-lg-5">
+                            <img src="{{ asset('bundles/lanoseo/images/cars/' ~ car[0].getCarImage) }}" alt="" />
+                        </div>
+                        <div class="col-lg-4">
+                            <br/>
+                            <strong>Dane zamawiającego:</strong><br/>
+                            Szymon Pogon<br/><br/>
+                            <form id="signin" role="form" method="post" action="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/summary/{{ car[0].getCarId }}">
+                                <div class="form-group">
+                                    <label for="usr">Miejsce odbioru:</label>
+                                    <select class="form-control" id="usr" name="place">
+                                        <option value="Galeria Krakowska">Galeria Krakowska</option>
+                                        <option value="Galeria Bronowice">Galeria Bronowice</option>
+                                        <option value="Bonarka City Center">Bonarka City Center</option>
+                                        <option value="Port lotniczy Balice">Port lotniczy Balice</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="usr">Data odbioru:</label>
+                                    <div class='input-group date' id='datetimepicker6'>
+                                        <input type='text' class="form-control" name="fromDate" required/>
+                                 <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                 </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="usr">Data zwrotu:</label>
+                                    <div class='input-group date' id='datetimepicker7'>
+                                        <input type='text' class="form-control" name="toDate" required/>
+                                 <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                                    </div>
+                                </div>
+
+                        </div><br/>
+                        <div class="col-lg-3">
+                            <strong>Naliczony rabat:</strong><br/>
+                            <h1>20%</h1><br/>
+                            <strong>Całkowita cena:</strong><br/>
+                            <h1>172 zł</h1><br/>
+                            <button type="submit" class="btn btn-danger">Anuluj</button>
+                            <button name="wyslij" type="submit" class="btn btn-success">Następny krok</button>
+                        </div>
+                        </form>
+                    </div>
+
+                    <div class="row hidden-lg">
+                        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                            <div class="thumbnail">
+                            <img src="{{ asset('bundles/lanoseo/images/cars/' ~ car[0].getCarImage) }}" alt="" />
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                            <br/>
+                            <strong>Dane zamawiającego:</strong><br/>
+                            Szymon Pogon<br/><br/>
+                            <form id="signin" role="form">
+                                <div class="form-group">
+                                    <label for="usr">Miejsce odbioru:</label>
+                                    <select class="form-control" id="usr">
+                                        <option value="Galeria Krakowska">Galeria Krakowska</option>
+                                        <option value="Galeria Bronowice">Galeria Bronowice</option>
+                                        <option value="Bonarka City Center">Bonarka City Center</option>
+                                        <option value="Port lotniczy Balice">Port lotniczy Balice</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="usr">Data wypożyczenia:</label><br/>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <select class="form-control" id="usr">
+                                        <option value="Galeria Krakowska">Galeria Krakowska</option>
+                                        <option value="Galeria Bronowice">Galeria Bronowice</option>
+                                        <option value="Bonarka City Center">Bonarka City Center</option>
+                                        <option value="Port lotniczy Balice">Port lotniczy Balice</option>
+                                    </select>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <select class="form-control" id="usr">
+                                        <option value="Galeria Krakowska">Galeria Krakowska</option>
+                                        <option value="Galeria Bronowice">Galeria Bronowice</option>
+                                        <option value="Bonarka City Center">Bonarka City Center</option>
+                                        <option value="Port lotniczy Balice">Port lotniczy Balice</option>
+                                    </select>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <select class="form-control" id="usr">
+                                        <option value="Galeria Krakowska">Galeria Krakowska</option>
+                                        <option value="Galeria Bronowice">Galeria Bronowice</option>
+                                        <option value="Bonarka City Center">Bonarka City Center</option>
+                                        <option value="Port lotniczy Balice">Port lotniczy Balice</option>
+                                    </select>
+                                    </div>
+                                    
+                                </div><br/><br/>
+                                <div class="form-group">
+                                    <label for="usr">Data zwrotu:</label><br/>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <select class="form-control" id="usr">
+                                        <option value="Galeria Krakowska">Galeria Krakowska</option>
+                                        <option value="Galeria Bronowice">Galeria Bronowice</option>
+                                        <option value="Bonarka City Center">Bonarka City Center</option>
+                                        <option value="Port lotniczy Balice">Port lotniczy Balice</option>
+                                    </select>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <select class="form-control" id="usr">
+                                        <option value="Galeria Krakowska">Galeria Krakowska</option>
+                                        <option value="Galeria Bronowice">Galeria Bronowice</option>
+                                        <option value="Bonarka City Center">Bonarka City Center</option>
+                                        <option value="Port lotniczy Balice">Port lotniczy Balice</option>
+                                    </select>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                        <select class="form-control" id="usr">
+                                        <option value="Galeria Krakowska">Galeria Krakowska</option>
+                                        <option value="Galeria Bronowice">Galeria Bronowice</option>
+                                        <option value="Bonarka City Center">Bonarka City Center</option>
+                                        <option value="Port lotniczy Balice">Port lotniczy Balice</option>
+                                    </select>
+                                    </div>
+                                    
+                                </div>
+                            </form>
+                        </div><br/>
+                        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                            <br/>
+                            <strong>Naliczony rabat:</strong><br/>
+                            <h1>20%</h1><br/>
+                            <strong>Całkowita cena:</strong><br/>
+                            <h1>172 zł</h1><br/>
+                            <button type="submit" class="btn btn-danger" style="width: 100%;">Anuluj</button><br/><br/>
+                            <button type="submit" class="btn btn-success" style="width: 100%;">Następny krok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <footer class="footer">
+            <div class="container text-center" style="margin-top: 20px;">
+                <p class="text-muted">Copyright &copy; 2016. Szymon Pogon, Paweł Rachwał, Kamil Walas.</p>
+            </div>
+        </footer>
+
+    <script src="{{ asset('bundles/lanoseo/js/holder.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{{ asset('bundles/lanoseo/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/lanoseo/js/moment.js') }}"></script>
+    <script src="{{ asset('bundles/lanoseo/js/transition.js') }}"></script>
+    <script src="{{ asset('bundles/lanoseo/js/collapse.js') }}"></script>
+    <script src="{{ asset('bundles/lanoseo/js/bootstrap-datetimepicker.js') }}"></script>
+    {#<script src="{{ asset('bundles/lanoseo/js/picker.js') }}"></script>#}
+
+
+
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker6').datetimepicker();
+            $('#datetimepicker7').datetimepicker({
+                useCurrent: false //Important! See issue #1075
+            });
+            $("#datetimepicker6").on("dp.change", function (e) {
+                $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+            });
+            $("#datetimepicker7").on("dp.change", function (e) {
+                $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+            });
+        });
+    </script>
+    </body>
+</html>
