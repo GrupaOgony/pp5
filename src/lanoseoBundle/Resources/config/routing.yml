@@ -43,3 +43,6 @@ payment:
 confirm_payment:
     path: /confirm_payment
     defaults: { _controller: lanoseoBundle:Default:confirmPayment }
+logout:
+    path: /logout
+    defaults: { _controller: lanoseoBundle:Default:logout }

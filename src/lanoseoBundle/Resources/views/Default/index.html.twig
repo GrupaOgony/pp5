@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
@@ -8,10 +7,10 @@
 
     <title>Lanoseo - wypożyczalnia nietuzinkowych samochodów</title>
 
-{% block stylesheets %}
-    <link href="{{ asset('bundles/lanoseo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('bundles/lanoseo/css/mystyle.css')}}" rel="stylesheet" type="text/css">
-{% endblock %}
+    {% block stylesheets %}
+        <link href="{{ asset('bundles/lanoseo/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+        <link href="{{ asset('bundles/lanoseo/css/mystyle.css')}}" rel="stylesheet" type="text/css">
+    {% endblock %}
 
 
     <!--[if lt IE 9]>
@@ -24,30 +23,35 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
-                <a href="#"><img src="{{ asset('bundles/lanoseo/images/social_icons/fb48.png') }}" alt="Facebook" /></a>
-                <a href="#"><img src="{{ asset('bundles/lanoseo/images/social_icons/twitter48.png') }}" alt="Twitter" /></a>
-                <a href="#"><img src="{{ asset('bundles/lanoseo/images/social_icons/gplus48.png') }}" alt="GPlus" /></a>
-                <a href="#"><img src="{{ asset('bundles/lanoseo/images/social_icons/yt48.png') }}" alt="YouTube" /></a>
+                <a href="http://facebook.com"><img src="{{ asset('bundles/lanoseo/images/social_icons/fb48.png') }}" alt="Facebook" /></a>
+                <a href="http://twitter.com"><img src="{{ asset('bundles/lanoseo/images/social_icons/twitter48.png') }}" alt="Twitter" /></a>
+                <a href="http://googleplus.com"><img src="{{ asset('bundles/lanoseo/images/social_icons/gplus48.png') }}" alt="GPlus" /></a>
+                <a href="http://youtube.com"><img src="{{ asset('bundles/lanoseo/images/social_icons/yt48.png') }}" alt="YouTube" /></a>
             </div>
             <div class="col-lg-6 text-right">
+                {% if app.session.get('zalogowany') %}
+                    Zalogowany jako: <strong>{{ loginName }}</strong>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/logout" class="btn btn-default navbar-btn" role="button">Wyloguj</a>
+                {% else %}
                 <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/login" class="btn btn-default navbar-btn" role="button">Zaloguj się</a>
                 <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/register" class="btn btn-danger navbar-btn" role="button">Zarejestruj się</a>
+                {% endif %}
             </div>
         </div>
     </div>
 </nav>
 
 <div class="jumbotron visible-lg">
-    <div class="container" style="margin-top: 50px;">
+    <div class="container">
         <h1><mark>Wypożyczalnia Lanoseo</mark></h1>
         <p><mark>Już tylko kilka kliknięć dzieli Cię od wypożyczenia najlepszego<br>&nbsp;samochodu wszech czasów.</mark></p>
-        <p style="margin-top: 40px;"><a class="btn btn-primary btn-lg" href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista" role="button">Już od 69 zł/doba &raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista" role="button">Już od 29 zł/doba &raquo;</a></p>
     </div>
 </div>
 
 
 
-<nav class = "navbar navbar-default" style="border-radius:0px;" role = "navigation">
+<nav class = "navbar navbar-default" role = "navigation">
 
     <div class = "navbar-header">
         <button type = "button" class = "navbar-toggle"
@@ -65,11 +69,16 @@
             <li class = "active"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php">Strona główna</a></li>
             <li><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista">Oferta</a></li>
             <li><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/kontakt">Kontakt</a></li>
+            {% if sessionCheck == 1 %}
+                <li class="hidden-lg"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/logout">Wyloguj</a></li>
+            {% else %}
             <li class="hidden-lg"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/login">Zaloguj się</a></li>
             <li class="hidden-lg"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/register">Zarejestruj się</a></li>
+            {% endif %}
         </ul>
     </div>
 </nav>
+
 <div class="container">
     <div class="page-header">
         <h3>Najchętniej wypożyczane</h3>

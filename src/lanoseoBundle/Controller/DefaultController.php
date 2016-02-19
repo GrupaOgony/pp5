@@ -11,12 +11,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 
 
 class DefaultController extends Controller
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
+        $session = $request->getSession();
+        if($session->get('zalogowany')) {
+
+            $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
+            $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
+            $loginName = $customer[0]->getCustomerName()." ".$customer[0]->getCustomerSurname();
+        } else {
+
+            $loginName = "";
+        }
         $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
         $mostlyOrderedCars = $this->getDoctrine()->getRepository('lanoseoBundle:Orders');
         $cars = $repository->findAll();
@@ -30,55 +42,114 @@ class DefaultController extends Controller
             'orders' => $orders,
             'cars' => $cars,
 
+            'loginName' => $loginName,
+
         ));
     }
-    public function contactAction()
+    public function contactAction(Request $request)
     {
-        return $this->render('lanoseoBundle:Default:contact.html.twig');
+        $session = $request->getSession();
+        if($session->get('zalogowany')) {
+
+            $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
+            $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
+            $loginName = $customer[0]->getCustomerName()." ".$customer[0]->getCustomerSurname();
+        } else {
+
+            $loginName = "";
+        }
+        return $this->render('lanoseoBundle:Default:contact.html.twig', array(
+
+
+            'loginName' => $loginName,
+
+        ));
     }
 
-    public function loginAction()
+    public function loginAction(Request $loginData)
     {
-        return $this->render('lanoseoBundle:Default:login.html.twig');
+        $session = $loginData->getSession();
+        $customerEmail = $loginData->get('customerEmail');
+        $customerPassword = $loginData->get('customerPassword');
+
+        if($session->get('zalogowany')) {
+            $loginCheck = 3;
+            //unset($session->get('zalogowany'));
+            return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/');
+        } else {
+
+
+            $loginCheck = 0;
+
+            if (isset($_POST['signin'])) {
+                if (empty($_POST['customerEmail']) || empty($_POST['customerPassword'])) {
+                    $loginCheck = 1;
+                } else {
+                    $customerRepository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
+                    $customer = $customerRepository->findBy(array('customerEmail' => $customerEmail));
+                    if (count($customer) == 1) {
+                        if ($customer[0]->getCustomerPassword() == sha1($customerPassword)) {
+                            //$session->get('zalogowany') = $customer[0]->getCustomerId();
+                            $session->set('zalogowany', $customer[0]->getCustomerId());
+                            return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/');
+                        } else {
+                            $loginCheck = 2;
+                        }
+                    } else {
+                        $loginCheck = 2;
+                    }
+                }
+            }
+        }
+
+        return $this->render('lanoseoBundle:Default:login.html.twig', array(
+
+            'customerEmail' => $customerEmail,
+            'loginCheck' => $loginCheck,
+
+        ));
     }
 
     public function registerAction(Request $registerData)
     {
+        $session = $registerData->getSession();
         $customerName = $registerData->get('customerName');
         $customerSurname = $registerData->get('customerSurname');
         $customerEmail = $registerData->get('customerEmail');
         $customerPassword = $registerData->get('customerPassword');
-
-        // 0 - maila nie ma w bazie danych, 1 - mail jest w bazie danych, 2 - rejestracja ok, 3 - wypełnij pola
-        $registerCheck = 0;
-
-        $customerRepository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
-
-        $customer = $customerRepository->findBy(array('customerEmail' => $customerEmail ));
-
-
-        if(count($customer) == 1) {
-            $registerCheck = 1;
+        if($session->get('zalogowany')) {
+            return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/');
         } else {
-            if(isset($_POST['signin'])) {
-                if(empty($_POST['customerEmail']) || empty($_POST['customerName']) || empty($_POST['customerSurname']) || empty($_POST['customerPassword'])) {
-                    $registerCheck = 3;
-                } else {
-                    $registerCheck = 2;
-                    $customer = new Customers();
-                    $customer -> setCustomerName($customerName);
-                    $customer -> setCustomerSurname($customerSurname);
-                    $customer -> setCustomerEmail($customerEmail);
-                    $customer -> setCustomerPassword(sha1($customerPassword));
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($customer);
-                    $em->flush();
+            // 0 - maila nie ma w bazie danych, 1 - mail jest w bazie danych, 2 - rejestracja ok, 3 - wypełnij pola
+            $registerCheck = 0;
+
+            $customerRepository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
+
+            $customer = $customerRepository->findBy(array('customerEmail' => $customerEmail));
+
+
+            if (count($customer) == 1) {
+                $registerCheck = 1;
+            } else {
+                if (isset($_POST['signup'])) {
+                    if (empty($_POST['customerEmail']) || empty($_POST['customerName']) || empty($_POST['customerSurname']) || empty($_POST['customerPassword'])) {
+                        $registerCheck = 3;
+                    } else {
+                        $registerCheck = 2;
+                        $customer = new Customers();
+                        $customer->setCustomerName($customerName);
+                        $customer->setCustomerSurname($customerSurname);
+                        $customer->setCustomerEmail($customerEmail);
+                        $customer->setCustomerPassword(sha1($customerPassword));
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($customer);
+                        $em->flush();
+                    }
+
                 }
 
             }
-
         }
-
         return $this->render('lanoseoBundle:Default:register.html.twig', array(
 
             'registerCheck' => $registerCheck,
@@ -88,12 +159,24 @@ class DefaultController extends Controller
 
         ));
     }
-    public function carlistAction()
+    public function carlistAction(Request $request)
     {
+        $session = $request->getSession();
+        if($session->get('zalogowany')) {
+
+            $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
+            $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
+            $loginName = $customer[0]->getCustomerName()." ".$customer[0]->getCustomerSurname();
+            $userId = $session->get('zalogowany');
+        } else {
+
+            $loginName = "";
+            $userId = "";
+        }
         $nowDate = new \DateTime();
         $me = $this -> getDoctrine() -> getEntityManager();
         $con = $me->getConnection();
-        $query = $con->prepare("SELECT car_id, order_payment, order_to FROM orders WHERE order_to > CURDATE()");
+        $query = $con->prepare("SELECT car_id, customer_id, order_id, order_payment, order_to FROM orders WHERE order_to > CURDATE()");
         $query->execute();
         $result = $query->fetchAll();
 
@@ -103,11 +186,14 @@ class DefaultController extends Controller
 
         $cars = $repository->findAll();
 
+
         return $this->render('lanoseoBundle:Default:carlist.html.twig', array(
 
             'cars' => $cars,
             'result' => $result,
+            'userId' => $userId,
 
+            'loginName' => $loginName,
 
         ));
     }
@@ -119,19 +205,29 @@ class DefaultController extends Controller
 
     public function placeOrderAction(Request $carRequest)
     {
+        $session = $carRequest->getSession();
+        if($session->get('zalogowany')) {
+
+            $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
+            $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
+            $loginName = $customer[0]->getCustomerName()." ".$customer[0]->getCustomerSurname();
+
         $carId = $carRequest->get('carId');
         $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
 
-        $customerRepo = $this ->getDoctrine()->getRepository('lanoseoBundle:Customers');
-        $customer = $customerRepo->findAll();
-        $selectedCustomer = $customer[0];
 
         $car = $repository->findBy(array('carId' => $carId ));
+        } else {
+
+            $loginName = "";
+            return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/login');
+        }
 
         return $this->render('lanoseoBundle:Default:place_order.html.twig', array(
 
             'car' => $car,
-            'customer' => $selectedCustomer,
+
+            'loginName' => $loginName,
 
         ));
     }
@@ -149,17 +245,34 @@ class DefaultController extends Controller
 
     public function successPaymentAction(Request $orderRequest)
     {
+        $session = $orderRequest->getSession();
+        if($session->get('zalogowany')) {
+
+            $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
+            $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
+            $loginName = $customer[0]->getCustomerName()." ".$customer[0]->getCustomerSurname();
+        } else {
+
+            $loginName = "";
+        }
         $orderId = $orderRequest->get('orderId');
         return $this->render('lanoseoBundle:Default:success_payment.html.twig', array(
 
             'orderId' => $orderId,
 
+            'loginName' => $loginName,
 
         ));
     }
 
     public function summaryAction(Request $request)
     {
+        $session = $request->getSession();
+        if($session->get('zalogowany')) {
+
+            $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
+            $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
+            $loginName = $customer[0]->getCustomerName()." ".$customer[0]->getCustomerSurname();
 
 
         $place = $request ->request->get('place');
@@ -240,7 +353,11 @@ class DefaultController extends Controller
         $con = $me->getConnection();
         $anotherQuery = $con->prepare("UPDATE `orders` SET order_price = ".$price." WHERE order_id=".$result[0]['order_id']);
         $anotherQuery->execute();
+        } else {
 
+            $loginName = "";
+            return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/');
+        }
 
         return $this->render('lanoseoBundle:Default:summary.html.twig', array(
 
@@ -253,6 +370,8 @@ class DefaultController extends Controller
             'result' => $result,
             'price' => $price,
             'customer' => $selectedCustomer,
+            'loginName' => $loginName,
+
 
 
         ));
@@ -264,6 +383,10 @@ class DefaultController extends Controller
         $orderRepository = $this->getDoctrine()->getRepository('lanoseoBundle:Orders');
 
         $order = $orderRepository->findBy(array('orderId' => $orderId ));
+
+        $customerRepository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
+
+        $customer = $customerRepository->findBy(array('customerId' => $order[0]->getCustomer() ));
 
         $count = count($order);
 
@@ -277,9 +400,9 @@ class DefaultController extends Controller
                 'id' => '725048',
                 'amount' => $order[0]->getOrderPrice(),
                 'description' => 'Zapłata za wynajem samochodu',
-                'firstname' => 'Paweł',
-                'lastname' => 'Rachwał',
-                'email' => 'jakismail@outlook.com',
+                'firstname' => $customer[0]->getCustomerName(),
+                'lastname' => $customer[0]->getCustomerSurname(),
+                'email' => $customer[0]->getCustomerEmail(),
                 'control' => $orderId,
                 'api_version' => 'dev',
                 'URL' => 'http://v-ie.uek.krakow.pl/~s182019/app_dev.php/success_payment/' . $orderId,
@@ -334,5 +457,16 @@ class DefaultController extends Controller
         }
     }
 
+    public function logoutAction(Request $request)
+    {
+        $session = $request->getSession();
+
+        if($session->get('zalogowany')) {
+            $session->remove('zalogowany');
+            return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/');
+        } else {
+            return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/');
+        }
+    }
 
 }
