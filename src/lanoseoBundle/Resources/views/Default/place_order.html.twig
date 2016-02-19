@@ -82,7 +82,7 @@
                         <div class="col-lg-4">
                             <br/>
                             <strong>Dane zamawiającego:</strong><br/>
-                            Szymon Pogon<br/><br/>
+                            {{ customer.getCustomerName ~ " " ~ customer.getCustomerSurname ~ " "}}<br/><br/>
                             <form id="signin" role="form" method="post" action="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/summary/{{ car[0].getCarId }}">
                                 <div class="form-group">
                                     <label for="usr">Miejsce odbioru:</label>
@@ -114,8 +114,6 @@
 
                         </div><br/>
                         <div class="col-lg-3">
-                            <strong>Naliczony rabat:</strong><br/>
-                            <h1>20%</h1><br/>
                             <strong>Cena za dobę:</strong><br/>
                             <h1>{{ car[0].getCarPrice }} zł</h1><br/>
 

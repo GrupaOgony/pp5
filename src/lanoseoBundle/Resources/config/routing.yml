@@ -27,13 +27,19 @@ place_order:
     defaults: { _controller: lanoseoBundle:Default:placeOrder }
 
 reject_payment:
-    path: /reject_payment
+    path: /reject_payment/{orderId}
     defaults: { _controller: lanoseoBundle:Default:rejectPayment }
 
 success_payment:
-    path: /success_payment
+    path: /success_payment/{orderId}
     defaults: { _controller: lanoseoBundle:Default:successPayment }
 
 summary:
     path: /summary/{carId}
     defaults: { _controller: lanoseoBundle:Default:summary }
+payment:
+    path: /payment/{orderId}
+    defaults: { _controller: lanoseoBundle:Default:payment }
+confirm_payment:
+    path: /confirm_payment
+    defaults: { _controller: lanoseoBundle:Default:confirmPayment }

@@ -67,39 +67,110 @@
             </ul>
         </div>
     </nav>
-        
-        
+    {% if registerCheck == 1 %}
+    <div class="container">
+        <div class="row">
+            <div class="alert alert-warning text-center" role="alert">Ten adres email jest już przypisany do innego konta!</div>
+        </div>
+    </div>
+    {% endif %}
+    {% if registerCheck == 2 %}
+        <div class="container">
+            <div class="row">
+                <div class="alert alert-success text-center" role="alert">Konto zostało założone! <a href="#"><strong>Możesz się zalogować</strong></a>.</div>
+            </div>
+        </div>
+    {% endif %}
+    {% if registerCheck == 3 %}
+        <div class="container">
+            <div class="row">
+                <div class="alert alert-danger text-center" role="alert">Musisz wypełnić wszystkie pola!</div>
+            </div>
+        </div>
+    {% endif %}
         <div class="container col-lg-offset-4 col-lg-4 col-lg-offset-4" style="margin-bottom: 100px; margin-top: 50px;">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title">Zarejestruj się</h3>
                 </div>
                 <div class="panel-body text-center">
-                    <form id="signin" role="form">
+                    {% if registerCheck == 1 %}
+                    <form id="signin" role="form" method="POST">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input id="name" type="name" class="form-control" name="name" value="" placeholder="Imię">
+                            <input id="name" type="name" class="form-control" name="customerName" value="{{ customerName }}" placeholder="Imię">
                         </div>
                         <br/>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input id="surname" type="surname" class="form-control" name="surname" value="" placeholder="Nazwisko">
+                            <input id="surname" type="surname" class="form-control" name="customerSurname" value="{{ customerSurname }}" placeholder="Nazwisko">
                         </div>
                         <br/>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                            <input id="email" type="email" class="form-control" name="email" value="" placeholder="Adres e-mail">
+                            <input id="email" type="text" class="form-control" name="customerEmail" value="" placeholder="Adres e-mail">
                         </div>
                         <br/>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                            <input id="password" type="password" class="form-control" name="password" value="" placeholder="Haslo">
+                            <input id="password" type="password" class="form-control" name="customerPassword" value="" placeholder="Haslo">
                         </div>
                         <br/>
-                        <div class="g-recaptcha" data-sitekey="6LenkxcTAAAAAGgy3uiCR2H3lNQiggjlPssOF3u3"></div>
-                        <br/>
-                        <button type="submit" class="btn btn-primary">Załóż konto</button>
+                        <button type="submit" class="btn btn-primary" name="signin">Załóż konto</button>
                    </form>
+                    {% endif %}
+
+                    {% if registerCheck == 3 %}
+                        <form id="signin" role="form" method="POST">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="name" type="name" class="form-control" name="customerName" value="{{ customerName }}" placeholder="Imię">
+                            </div>
+                            <br/>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="surname" type="surname" class="form-control" name="customerSurname" value="{{ customerSurname }}" placeholder="Nazwisko">
+                            </div>
+                            <br/>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="email" type="text" class="form-control" name="customerEmail" value="{{ customerEmail }}" placeholder="Adres e-mail">
+                            </div>
+                            <br/>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input id="password" type="password" class="form-control" name="customerPassword" value="" placeholder="Haslo">
+                            </div>
+                            <br/>
+                            <button type="submit" class="btn btn-primary" name="signin">Załóż konto</button>
+                        </form>
+                    {% endif %}
+
+                    {% if (registerCheck == 0 or registerCheck == 2) %}
+                        <form id="signin" role="form" method="POST">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="name" type="name" class="form-control" name="customerName" value="" placeholder="Imię">
+                            </div>
+                            <br/>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="surname" type="surname" class="form-control" name="customerSurname" value="" placeholder="Nazwisko">
+                            </div>
+                            <br/>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="email" type="text" class="form-control" name="customerEmail" value="" placeholder="Adres e-mail">
+                            </div>
+                            <br/>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input id="password" type="password" class="form-control" name="customerPassword" value="" placeholder="Haslo">
+                            </div>
+                            <br/>
+                            <button type="submit" class="btn btn-primary" name="signin">Załóż konto</button>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -109,8 +180,7 @@
                 <p class="text-muted">Copyright &copy; 2016. Szymon Pogon, Paweł Rachwał, Kamil Walas.</p>
             </div>
         </footer>
-        
-        <script src='https://www.google.com/recaptcha/api.js'></script>
+
         <script src="{{ asset('bundles/lanoseo/js/holder.js') }}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="{{ asset('bundles/lanoseo/js/bootstrap.min.js') }}"></script>

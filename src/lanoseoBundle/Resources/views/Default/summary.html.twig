@@ -86,7 +86,7 @@
                         <div class="col-lg-4">
                             <br/>
                             <strong>Dane zamawiającego</strong>
-                            <br/>{{ customer.getCustomerName ~ " " ~ customer.getCustomerName ~ " "}}  <br>
+                            <br/>{{ customer.getCustomerName ~ " " ~ customer.getCustomerSurname ~ " "}}  <br>
                             {{ customer.getCustomerEmail }}<br><br>
                             <strong>Należny rabat dla zamawiającego</strong>
                             <br/>{{ percentageDiscount }}%<br><br>
@@ -115,7 +115,7 @@
 
 
                             <button type="submit" class="btn btn-danger">Anuluj</button>
-                            <button type="submit" class="btn btn-success">Przejdź do płatności</button>
+                            <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/payment/{{ result[0].order_id }}""><button type="submit" class="btn btn-success">Przejdź do płatności</button></a>
                         </div>
                     </div>
 
@@ -141,7 +141,7 @@
                             <strong>Całkowita cena</strong><br/>
                             <h1>172 zł</h1><br/>
                             <button type="submit" class="btn btn-danger" style="width: 100%;">Anuluj</button><br/><br/>
-                            <button type="submit" class="btn btn-success" style="width: 100%;">Przejdź do płatności</button>
+                            <a href=""></a><button type="submit" class="btn btn-success">Przejdź do płatności</button></a>
                         </div>
                     </div>
                 </div>

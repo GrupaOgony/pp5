@@ -2,6 +2,7 @@
 
 namespace lanoseoBundle\Entity;
 
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,7 +49,7 @@ class Customers
      * @ORM\Column(name="customer_password", type="text", length=65535, nullable=false)
      */
     private $customerPassword;
-
+    
 
 
     /**
