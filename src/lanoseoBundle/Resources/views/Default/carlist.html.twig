@@ -76,6 +76,7 @@
         
         <div class="container" style="margin-bottom: 100px;">
             <div class="row">
+
                 {% for car in cars %}
                     <div class="col-lg-3 col-md-6 col-sm-6">
                         <div class="thumbnail">
@@ -85,7 +86,21 @@
                                 <h3>{{ car.getCarName }}</h3>
                                 <p>{{'Segment: ' ~ car.getCarSegment }}</p>
                                 <p>{{'Cena za dzień: ' ~ car.getCarPrice ~ 'zł'}}</p>
-                                <p><a href={{ "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/place_order/"~car.getCarId }} class="btn btn-primary" role="button">Wypożycz</a></p>
+
+                                {% for item in result if car.getCarId == item.car_id %}
+
+                                    {% if item.order_payment == 0 %}
+
+                                        <p><a href="#" class="btn btn-warning" role="button">Samochód Zarezerwowany</a></p>
+                                        {% else %}
+                                        <p><a href="#" class="btn btn-danger" role="button">Samochód Wypożyczony</a></p>
+                                    {% endif %}
+                                    {% else %}
+
+                                        <p><a href={{ "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/place_order/"~car.getCarId }} class="btn btn-primary" role="button">Wypożycz</a></p>
+
+                                {% endfor %}
+
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -86,7 +86,10 @@
                         <div class="col-lg-4">
                             <br/>
                             <strong>Dane zamawiającego</strong>
-                            <br/>Szymon Pogon<br><br>
+                            <br/>{{ customer.getCustomerName ~ " " ~ customer.getCustomerName ~ " "}}  <br>
+                            {{ customer.getCustomerEmail }}<br><br>
+                            <strong>Należny rabat dla zamawiającego</strong>
+                            <br/>{{ percentageDiscount }}%<br><br>
                             <strong>Miejsce odbioru</strong><br>
                             {{ place }}<br><br>
                             <strong>ID zamówienia</strong><br>
@@ -99,6 +102,7 @@
                             <strong>Dane zamówienia</strong><br/>
                             Od: {{ fromDate }}<br/>
                             Do: {{ toDate }}<br/><br/>
+
                             Samochód: {{ car[0].getCarName }}<br/>
                             Segment: {{ car[0].getCarSegment }}<br/>
                             Cena za dobę: {{  car[0].getCarPrice  }} zł
@@ -106,7 +110,10 @@
                         <div class="col-lg-3">
                             <br/>
                             <strong>Całkowita cena</strong><br/>
-                            <h1>172 zł</h1><br/>
+                            <h1>{{ price }} zł</h1><br/>
+                            <strong>Rabat wynosi: {{ discount }}zł</strong> <br><br><br>
+
+
                             <button type="submit" class="btn btn-danger">Anuluj</button>
                             <button type="submit" class="btn btn-success">Przejdź do płatności</button>
                         </div>
