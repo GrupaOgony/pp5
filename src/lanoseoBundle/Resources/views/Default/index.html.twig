@@ -12,7 +12,6 @@
         <link href="{{ asset('bundles/lanoseo/css/mystyle.css')}}" rel="stylesheet" type="text/css">
     {% endblock %}
 
-
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -49,10 +48,7 @@
     </div>
 </div>
 
-
-
 <nav class = "navbar navbar-default" role = "navigation">
-
     <div class = "navbar-header">
         <button type = "button" class = "navbar-toggle"
                 data-toggle = "collapse" data-target = "#example-navbar-collapse">
@@ -81,16 +77,13 @@
 
 <div class="container">
     <div class="page-header">
-        <h3>Najchętniej wypożyczane</h3>
+        <h3>Najczęściej wypożyczane</h3>
     </div>
 </div>
-{#{% for item in orders %}#}
-    {#{{ item.getOrderId }}#}
-{#{% endfor %}#}
+
 <div class="container">
     <div class="row">
         {% for car in cars %}
-
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="thumbnail">
                     <img src="{{ asset('bundles/lanoseo/images/cars/' ~ car.car_image) }}" alt="...">
@@ -104,6 +97,7 @@
         {% endfor %}
     </div>
 </div>
+
 <div class="container">
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -138,11 +132,9 @@
     </div>
 </footer>
 
-
 <script src="{{ asset('bundles/lanoseo/js/holder.js') }}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="{{ asset('bundles/lanoseo/js/bootstrap.min.js') }}"></script>
-
 
 </body>
 </html>

@@ -50,13 +50,11 @@ class DefaultController extends Controller
 
         }
 
-
         return $this->render('lanoseoBundle:Default:index.html.twig', array(
 
             'orders' => $orders,
             'cars' => $cars,
             'loginName' => $loginName,
-
         ));
     }
     public function contactAction(Request $request)
@@ -88,7 +86,7 @@ class DefaultController extends Controller
         if($session->get('zalogowany')) {
             $loginCheck = 3;
             //unset($session->get('zalogowany'));
-            return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/');
+            return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/price/asc');
         } else {
 
 
@@ -104,7 +102,7 @@ class DefaultController extends Controller
                         if ($customer[0]->getCustomerPassword() == sha1($customerPassword)) {
                             //$session->get('zalogowany') = $customer[0]->getCustomerId();
                             $session->set('zalogowany', $customer[0]->getCustomerId());
-                            return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/');
+                            return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/price/asc');
                         } else {
                             $loginCheck = 2;
                         }
@@ -237,7 +235,6 @@ class DefaultController extends Controller
     {
         $session = $carRequest->getSession();
         if($session->get('zalogowany')) {
-
             $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
             $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
             $loginName = $customer[0]->getCustomerName()." ".$customer[0]->getCustomerSurname();
@@ -302,92 +299,118 @@ class DefaultController extends Controller
     {
         $session = $request->getSession();
         if($session->get('zalogowany')) {
+            $fromDate = $request ->request->get('fromDate');
 
-            $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
-            $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
-            $loginName = $customer[0]->getCustomerName()." ".$customer[0]->getCustomerSurname();
+            if(!empty($_POST['fromDate']) && !empty($_POST['toDate'])) {
+
+                $exp = explode("/", $fromDate);
+                $day = $exp[1];
+                $month = $exp[0];
+                $exp2 = explode(" ", $exp[2]);
+                $year = $exp2[0];
+                $exp3 = explode(":", $exp2[1]);
+                $hour = $exp3[0];
+                $exp4 = explode(" ", $exp3[1]);
+                $minute = $exp4[0];
+                $ampm = $exp2[2];
+                $currDate = date("Y-m-d g:i:s A");
+
+                $fDate = $year . "-" . $month . "-" . $day . " " . $hour . ":" . $minute . ":" . date("s") . " " . $ampm;
+                $newfDate = strtotime($fDate);
+                $newcurrDate = strtotime($currDate);
+            }
+            if(empty($_POST['fromDate']) || empty($_POST['toDate']) || $newfDate <= $newcurrDate) {
+                return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/place_order/'.$request->get('carId')."&error=1");
+            } else {
+                $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
+                $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
+                $loginName = $customer[0]->getCustomerName() . " " . $customer[0]->getCustomerSurname();
 
 
-        $place = $request ->request->get('place');
-        $fromDate = $request ->request->get('fromDate');
-        $toDate = $request ->request->get('toDate');
-        $carId = $request->get('carId');
-        $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
-        $car = $repository->findBy(array('carId' => $carId ));
+                $place = $request->request->get('place');
+
+                $toDate = $request->request->get('toDate');
+                $carId = $request->get('carId');
+                $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
+                $car = $repository->findBy(array('carId' => $carId));
 
 
-        $customerRepo = $this ->getDoctrine()->getRepository('lanoseoBundle:Customers');
-        $customer = $customerRepo->findAll();
-        $selectedCustomer = $customer[1];
+//        $customerRepo = $this ->getDoctrine()->getRepository('lanoseoBundle:Customers');
+//        $customer = $customerRepo->findAll();
+//        $selectedCustomer = $customer[1];
 
-        $nowDate = new \DateTime();
-        $fromDateOrder = \DateTime::createFromFormat('m/d/Y g:i A', $fromDate);
-        $toDateOrder = \DateTime::createFromFormat('m/d/Y g:i A', $toDate);
+                $nowDate = new \DateTime();
+                $fromDateOrder = \DateTime::createFromFormat('m/d/Y g:i A', $fromDate);
+                $toDateOrder = \DateTime::createFromFormat('m/d/Y g:i A', $toDate);
 
-        $order = new Orders();
-        $order -> setOrderDate($nowDate);
-        $order -> setOrderFrom($fromDateOrder);
-        $order -> setOrderTo($toDateOrder);
-        $order -> setOrderPayment(false);
-        $order -> setOrderPrice(153);
-        $order -> setCustomer($selectedCustomer);
-        $order -> setCar($car[0]);
+                $order = new Orders();
+                $order->setOrderDate($nowDate);
+                $order->setOrderFrom($fromDateOrder);
+                $order->setOrderTo($toDateOrder);
+                $order->setOrderPayment(false);
+                $order->setOrderPrice(153);
+                $order->setCustomer($customer[0]);
+                $order->setCar($car[0]);
 //dodawanie rekordów!
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($order);
-        $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($order);
+                $em->flush();
 
-        $me = $this -> getDoctrine() -> getEntityManager();
-        $con = $me->getConnection();
-        $query = $con->prepare("SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1");
-        $query->execute();
-        $result = $query->fetchAll();
-
-
-        //obliczanie ceny
-
-        $diff = $fromDateOrder->diff($toDateOrder);
-        $price = 0;
-        $discount = 0;
-        $percentageDiscount = 0;
+                $me = $this->getDoctrine()->getEntityManager();
+                $con = $me->getConnection();
+                $query = $con->prepare("SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1");
+                $query->execute();
+                $result = $query->fetchAll();
 
 
+                //obliczanie ceny
 
-        $query = $con->prepare("SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1");
-        $query->execute();
-        $result = $query->fetchAll();
-
-
-            $anotherQuery = $con->prepare("SELECT COUNT(customer_id) FROM orders WHERE order_to BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() AND customer_id LIKE ".$session->get('zalogowany'));
-            $anotherQuery->execute();
-            $otherResult = $anotherQuery->fetchAll();
-
-        if ($otherResult[0]["COUNT(customer_id)"] >= 3)
-        {
-            $price = $diff->d * $car[0]->getCarPrice() * 0.8;
-            $discount = $diff->d * $car[0]->getCarPrice() * 0.2;
-            $percentageDiscount = 20;
-
-        }
-        else{
-            if ($diff->d > 7)
-            {
-                $price = $diff->d * $car[0]->getCarPrice() * 0.9;
-                $discount = $diff->d * $car[0]->getCarPrice() * 0.1;
-                $percentageDiscount = 10;
-            }
-            else
-            {
-                $price = $diff->d * $car[0]->getCarPrice();
-                $discount = $diff->d * $car[0]->getCarPrice() * 0;
+                $diff = $fromDateOrder->diff($toDateOrder);
+                $price = 0;
+                $discount = 0;
                 $percentageDiscount = 0;
-            }
-        }
-        $me = $this -> getDoctrine() -> getEntityManager();
-        $con = $me->getConnection();
-        $anotherQuery = $con->prepare("UPDATE `orders` SET order_price = ".$price." WHERE order_id=".$result[0]['order_id']);
-        $anotherQuery->execute();
-        } else {
+
+
+                $query = $con->prepare("SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1");
+                $query->execute();
+                $result = $query->fetchAll();
+
+
+                $anotherQuery = $con->prepare("SELECT COUNT(customer_id) FROM orders WHERE order_to BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() AND customer_id LIKE " . $session->get('zalogowany'));
+                $anotherQuery->execute();
+                $otherResult = $anotherQuery->fetchAll();
+
+                $date3min = date("Y-m-d H:i:s");
+                $currentDate = strtotime($date3min);
+                $futureDate = $currentDate + (60 * 3);
+                $date3min = date("Y-m-d H:i:s", $futureDate);
+
+
+                if ($otherResult[0]["COUNT(customer_id)"] >= 3) {
+                    $price = $diff->d * $car[0]->getCarPrice() * 0.8;
+                    $discount = $diff->d * $car[0]->getCarPrice() * 0.2;
+                    $percentageDiscount = 20;
+
+                } else {
+                    if ($diff->d > 7) {
+                        $price = $diff->d * $car[0]->getCarPrice() * 0.9;
+                        $discount = $diff->d * $car[0]->getCarPrice() * 0.1;
+                        $percentageDiscount = 10;
+                    } else {
+                        $price = $diff->d * $car[0]->getCarPrice();
+                        $discount = $diff->d * $car[0]->getCarPrice() * 0;
+                        $percentageDiscount = 0;
+                    }
+                }
+                $me = $this->getDoctrine()->getEntityManager();
+                $con = $me->getConnection();
+                $anotherQuery = $con->prepare("UPDATE `orders` SET order_price = " . $price . " WHERE order_id=" . $result[0]['order_id']);
+                $anotherQuery->execute();
+
+                    $eventSchedule = $con->prepare("CREATE EVENT order_" . $result[0]['order_id'] . "_user_" . $session->get('zalogowany') . " ON SCHEDULE AT('" . $date3min . "') ON COMPLETION PRESERVE ENABLE DO DELETE FROM e123_pp5.orders WHERE order_id=" . $result[0]['order_id'] . " AND order_payment LIKE 0");
+                $eventSchedule->execute();
+
+        }} else {
 
             $loginName = "";
             return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/');
@@ -403,10 +426,8 @@ class DefaultController extends Controller
             'car' => $car,
             'result' => $result,
             'price' => $price,
-            'customer' => $selectedCustomer,
+            'customer' => $customer[0],
             'loginName' => $loginName,
-
-
 
         ));
     }
