@@ -93,12 +93,11 @@
 
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="thumbnail">
-                    <img src="{{ asset('bundles/lanoseo/images/cars/' ~ car.getCarImage) }}" alt="...">
+                    <img src="{{ asset('bundles/lanoseo/images/cars/' ~ car.car_image) }}" alt="...">
                     <div class="caption text-center">
-                        <h3>{{ car.getCarName }}</h3>
-                        <p>{{'Segment: ' ~ car.getCarSegment }}</p>
-                        <p>{{'Cena za dzień: ' ~ car.getCarPrice ~ 'zł'}}</p>
-                        <p><a href="#" class="btn btn-primary" role="button">Wypożycz</a></p>
+                        <h3>{{ car.car_name }}</h3>
+                        <p>{{'Segment: ' ~ car.car_segment }}</p>
+                        <p>{{'Cena za dzień: ' ~ car.car_price ~ 'zł'}}</p>
                     </div>
                 </div>
             </div>
@@ -126,7 +125,7 @@
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <img src="{{ asset('bundles/lanoseo/images/trust_icons/vip96.png') }}" alt="...">
                 <div class="caption text-center">
-                    <p><b>Poczuj</b><br>się wyjątkowo</p>
+                    <p><b>Zniżki</b><br>dla stałych klientów</p>
                 </div>
             </div>
         </div>

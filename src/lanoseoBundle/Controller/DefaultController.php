@@ -34,14 +34,27 @@ class DefaultController extends Controller
         $cars = $repository->findAll();
         $orders = $mostlyOrderedCars->findAll();
 
+        $me = $this -> getDoctrine() -> getEntityManager();
+        $con = $me->getConnection();
 
+            $anotherQuery = $con->prepare("SELECT orders.car_id, cars.car_name, cars.car_segment, cars.car_price, cars.car_image FROM orders INNER JOIN cars ON orders.car_id=cars.car_id GROUP BY orders.car_id HAVING COUNT(orders.car_id) ORDER BY COUNT(orders.car_id) desc LIMIT 4");
+
+
+        $anotherQuery->execute();
+        $cars = $anotherQuery->fetchAll();
+
+        if(count($cars) < 4) {
+            $anotherQuery = $con->prepare("SELECT * FROM cars LIMIT 4");
+            $anotherQuery->execute();
+            $cars = $anotherQuery->fetchAll();
+
+        }
 
 
         return $this->render('lanoseoBundle:Default:index.html.twig', array(
 
             'orders' => $orders,
             'cars' => $cars,
-
             'loginName' => $loginName,
 
         ));
@@ -234,6 +247,10 @@ class DefaultController extends Controller
 
 
         $car = $repository->findBy(array('carId' => $carId ));
+
+
+
+
         } else {
 
             $loginName = "";
@@ -243,7 +260,6 @@ class DefaultController extends Controller
         return $this->render('lanoseoBundle:Default:place_order.html.twig', array(
 
             'car' => $car,
-
             'loginName' => $loginName,
 
         ));
@@ -341,9 +357,10 @@ class DefaultController extends Controller
         $query->execute();
         $result = $query->fetchAll();
 
-        $anotherQuery = $con->prepare("SELECT COUNT(customer_id) FROM orders WHERE order_to BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()");
-        $anotherQuery->execute();
-        $otherResult = $anotherQuery->fetchAll();
+
+            $anotherQuery = $con->prepare("SELECT COUNT(customer_id) FROM orders WHERE order_to BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() AND customer_id LIKE ".$session->get('zalogowany'));
+            $anotherQuery->execute();
+            $otherResult = $anotherQuery->fetchAll();
 
         if ($otherResult[0]["COUNT(customer_id)"] >= 3)
         {
