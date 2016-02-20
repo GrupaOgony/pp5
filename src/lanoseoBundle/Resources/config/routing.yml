@@ -15,7 +15,7 @@ register:
     defaults: { _controller: lanoseoBundle:Default:register }
 
 carlist:
-    path: /lista
+    path: /lista/{for}/{how}
     defaults: { _controller: lanoseoBundle:Default:carlist }
 
 error:

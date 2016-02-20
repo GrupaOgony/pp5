@@ -45,7 +45,7 @@
     <div class="container">
         <h1><mark>Wypożyczalnia Lanoseo</mark></h1>
         <p><mark>Już tylko kilka kliknięć dzieli Cię od wypożyczenia najlepszego<br>&nbsp;samochodu wszech czasów.</mark></p>
-        <p><a class="btn btn-primary btn-lg" href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista" role="button">Już od 29 zł/doba &raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/price/asc" role="button">Już od 29 zł/doba &raquo;</a></p>
     </div>
 </div>
 
@@ -67,7 +67,7 @@
     <div class = "collapse navbar-collapse" id = "example-navbar-collapse">
         <ul class = "nav navbar-nav">
             <li><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php">Strona główna</a></li>
-            <li class = "active"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista">Oferta</a></li>
+            <li class = "active"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/price/asc">Oferta</a></li>
             <li><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/kontakt">Kontakt</a></li>
             {% if app.session.get('zalogowany') %}
                 <li class="hidden-lg"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/logout">Wyloguj</a></li>
@@ -81,7 +81,24 @@
         
         <div class="container">
             <div class="page-header">
-                <h3>Lista samochodów <small><a href="#">A-Z &#8595;&#8593;</a> | <a href="#">Segment &#8595;&#8593;</a> | <a href="#">Cena &#8595;&#8593;</a></small></h3>
+                <h3>Lista samochodów
+                    <small>
+                        {% if (for == "name" and how == "asc") %}
+                        <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/name/desc">A-Z &#8595;&#8593;</a> |
+                        {% else %}
+                            <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/name/asc">A-Z &#8595;&#8593;</a> |
+                        {% endif %}
+                        {% if (for == "segment" and how == "asc") %}
+                        <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/segment/desc">Segment &#8595;&#8593;</a> |
+                        {% else %}
+                            <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/segment/asc">Segment &#8595;&#8593;</a> |
+                        {% endif %}
+                        {% if (for == "price" and how == "asc") %}
+                        <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/price/desc">Cena &#8595;&#8593;</a></small></h3>
+                        {% else %}
+                            <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/price/asc">Cena &#8595;&#8593;</a></small></h3>
+                        {% endif %}
+
             </div>
         </div>
         

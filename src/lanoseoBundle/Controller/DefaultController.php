@@ -173,6 +173,8 @@ class DefaultController extends Controller
             $loginName = "";
             $userId = "";
         }
+        $for = $request->get('for');
+        $how = $request->get('how');
         $nowDate = new \DateTime();
         $me = $this -> getDoctrine() -> getEntityManager();
         $con = $me->getConnection();
@@ -183,8 +185,22 @@ class DefaultController extends Controller
 
 
         $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
+        if($for == "price" && $how == "asc") {
+            $cars = $repository->findBy(array(),array('carPrice' => 'asc'));
+        } elseif($for == "name" && $how == "asc") {
+            $cars = $repository->findBy(array(),array('carName' => 'asc'));
+        } elseif($for == "segment" && $how == "asc") {
+            $cars = $repository->findBy(array(),array('carSegment' => 'asc'));
+        } elseif($for == "name" && $how == "desc") {
+            $cars = $repository->findBy(array(),array('carName' => 'desc'));
+        } elseif($for == "segment" && $how == "desc") {
+            $cars = $repository->findBy(array(),array('carSegment' => 'desc'));
+        } elseif($for == "price" && $how == "desc") {
+            $cars = $repository->findBy(array(),array('carSegment' => 'desc'));
+        } else {
+            $cars = $repository->findBy(array(),array('carPrice' => 'asc'));
+        }
 
-        $cars = $repository->findAll();
 
 
         return $this->render('lanoseoBundle:Default:carlist.html.twig', array(
@@ -192,7 +208,8 @@ class DefaultController extends Controller
             'cars' => $cars,
             'result' => $result,
             'userId' => $userId,
-
+            'for' => $for,
+            'how' => $how,
             'loginName' => $loginName,
 
         ));
