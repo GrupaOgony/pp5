@@ -18,17 +18,9 @@ carlist:
     path: /lista/{for}/{how}
     defaults: { _controller: lanoseoBundle:Default:carlist }
 
-error:
-    path: /error
-    defaults: { _controller: lanoseoBundle:Default:error }
-
 place_order:
-    path: /place_order/{carId}
+    path: /place_order/{carId}/{error}
     defaults: { _controller: lanoseoBundle:Default:placeOrder }
-
-reject_payment:
-    path: /reject_payment/{orderId}
-    defaults: { _controller: lanoseoBundle:Default:rejectPayment }
 
 success_payment:
     path: /success_payment/{orderId}
@@ -37,12 +29,15 @@ success_payment:
 summary:
     path: /summary/{carId}
     defaults: { _controller: lanoseoBundle:Default:summary }
+
 payment:
     path: /payment/{orderId}
     defaults: { _controller: lanoseoBundle:Default:payment }
+
 confirm_payment:
     path: /confirm_payment
     defaults: { _controller: lanoseoBundle:Default:confirmPayment }
+
 logout:
     path: /logout
     defaults: { _controller: lanoseoBundle:Default:logout }

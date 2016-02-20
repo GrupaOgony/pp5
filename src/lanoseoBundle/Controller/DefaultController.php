@@ -14,19 +14,16 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 
-
 class DefaultController extends Controller
 {
     public function indexAction(Request $request)
     {
         $session = $request->getSession();
         if($session->get('zalogowany')) {
-
             $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
             $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
             $loginName = $customer[0]->getCustomerName()." ".$customer[0]->getCustomerSurname();
         } else {
-
             $loginName = "";
         }
         $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
@@ -37,9 +34,7 @@ class DefaultController extends Controller
         $me = $this -> getDoctrine() -> getEntityManager();
         $con = $me->getConnection();
 
-            $anotherQuery = $con->prepare("SELECT orders.car_id, cars.car_name, cars.car_segment, cars.car_price, cars.car_image FROM orders INNER JOIN cars ON orders.car_id=cars.car_id GROUP BY orders.car_id HAVING COUNT(orders.car_id) ORDER BY COUNT(orders.car_id) desc LIMIT 4");
-
-
+        $anotherQuery = $con->prepare("SELECT orders.car_id, cars.car_name, cars.car_segment, cars.car_price, cars.car_image FROM orders INNER JOIN cars ON orders.car_id=cars.car_id GROUP BY orders.car_id HAVING COUNT(orders.car_id) ORDER BY COUNT(orders.car_id) desc LIMIT 4");
         $anotherQuery->execute();
         $cars = $anotherQuery->fetchAll();
 
@@ -47,28 +42,26 @@ class DefaultController extends Controller
             $anotherQuery = $con->prepare("SELECT * FROM cars LIMIT 4");
             $anotherQuery->execute();
             $cars = $anotherQuery->fetchAll();
-
         }
 
         return $this->render('lanoseoBundle:Default:index.html.twig', array(
-
             'orders' => $orders,
             'cars' => $cars,
             'loginName' => $loginName,
         ));
     }
+
     public function contactAction(Request $request)
     {
         $session = $request->getSession();
         if($session->get('zalogowany')) {
-
             $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
             $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
             $loginName = $customer[0]->getCustomerName()." ".$customer[0]->getCustomerSurname();
         } else {
-
             $loginName = "";
         }
+
         return $this->render('lanoseoBundle:Default:contact.html.twig', array(
 
 
@@ -82,16 +75,12 @@ class DefaultController extends Controller
         $session = $loginData->getSession();
         $customerEmail = $loginData->get('customerEmail');
         $customerPassword = $loginData->get('customerPassword');
-
         if($session->get('zalogowany')) {
             $loginCheck = 3;
             //unset($session->get('zalogowany'));
             return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/price/asc');
         } else {
-
-
             $loginCheck = 0;
-
             if (isset($_POST['signin'])) {
                 if (empty($_POST['customerEmail']) || empty($_POST['customerPassword'])) {
                     $loginCheck = 1;
@@ -133,12 +122,8 @@ class DefaultController extends Controller
         } else {
             // 0 - maila nie ma w bazie danych, 1 - mail jest w bazie danych, 2 - rejestracja ok, 3 - wypełnij pola
             $registerCheck = 0;
-
             $customerRepository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
-
             $customer = $customerRepository->findBy(array('customerEmail' => $customerEmail));
-
-
             if (count($customer) == 1) {
                 $registerCheck = 1;
             } else {
@@ -161,6 +146,7 @@ class DefaultController extends Controller
 
             }
         }
+
         return $this->render('lanoseoBundle:Default:register.html.twig', array(
 
             'registerCheck' => $registerCheck,
@@ -170,17 +156,16 @@ class DefaultController extends Controller
 
         ));
     }
+
     public function carlistAction(Request $request)
     {
         $session = $request->getSession();
         if($session->get('zalogowany')) {
-
             $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
             $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
             $loginName = $customer[0]->getCustomerName()." ".$customer[0]->getCustomerSurname();
             $userId = $session->get('zalogowany');
         } else {
-
             $loginName = "";
             $userId = "";
         }
@@ -192,8 +177,6 @@ class DefaultController extends Controller
         $query = $con->prepare("SELECT car_id, customer_id, order_id, order_payment, order_to FROM orders WHERE order_to > CURDATE()");
         $query->execute();
         $result = $query->fetchAll();
-
-
 
         $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
         if($for == "price" && $how == "asc") {
@@ -212,8 +195,6 @@ class DefaultController extends Controller
             $cars = $repository->findBy(array(),array('carPrice' => 'asc'));
         }
 
-
-
         return $this->render('lanoseoBundle:Default:carlist.html.twig', array(
 
             'cars' => $cars,
@@ -226,11 +207,6 @@ class DefaultController extends Controller
         ));
     }
 
-    public function errorAction()
-    {
-        return $this->render('lanoseoBundle:Default:error.html.twig');
-    }
-
     public function placeOrderAction(Request $carRequest)
     {
         $session = $carRequest->getSession();
@@ -241,35 +217,18 @@ class DefaultController extends Controller
 
         $carId = $carRequest->get('carId');
         $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
-
-
         $car = $repository->findBy(array('carId' => $carId ));
-
-
-
-
         } else {
-
             $loginName = "";
             return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/login');
         }
+        $error = $carRequest->get('error');
 
         return $this->render('lanoseoBundle:Default:place_order.html.twig', array(
 
             'car' => $car,
             'loginName' => $loginName,
-
-        ));
-    }
-
-    public function rejectPaymentAction(Request $orderRequest)
-    {
-        $orderId = $orderRequest->get('orderId');
-        return $this->render('lanoseoBundle:Default:reject_payment.html.twig', array(
-
-            'orderId' => $orderId,
-
-
+            'error' => $error,
         ));
     }
 
@@ -277,21 +236,17 @@ class DefaultController extends Controller
     {
         $session = $orderRequest->getSession();
         if($session->get('zalogowany')) {
-
             $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
             $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
             $loginName = $customer[0]->getCustomerName()." ".$customer[0]->getCustomerSurname();
         } else {
-
             $loginName = "";
         }
         $orderId = $orderRequest->get('orderId');
+
         return $this->render('lanoseoBundle:Default:success_payment.html.twig', array(
-
             'orderId' => $orderId,
-
             'loginName' => $loginName,
-
         ));
     }
 
@@ -300,9 +255,7 @@ class DefaultController extends Controller
         $session = $request->getSession();
         if($session->get('zalogowany')) {
             $fromDate = $request ->request->get('fromDate');
-
             if(!empty($_POST['fromDate']) && !empty($_POST['toDate'])) {
-
                 $exp = explode("/", $fromDate);
                 $day = $exp[1];
                 $month = $exp[0];
@@ -314,30 +267,21 @@ class DefaultController extends Controller
                 $minute = $exp4[0];
                 $ampm = $exp2[2];
                 $currDate = date("Y-m-d g:i:s A");
-
                 $fDate = $year . "-" . $month . "-" . $day . " " . $hour . ":" . $minute . ":" . date("s") . " " . $ampm;
                 $newfDate = strtotime($fDate);
                 $newcurrDate = strtotime($currDate);
             }
             if(empty($_POST['fromDate']) || empty($_POST['toDate']) || $newfDate <= $newcurrDate) {
-                return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/place_order/'.$request->get('carId')."&error=1");
+                return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/place_order/'.$request->get('carId')."/1");
             } else {
                 $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
                 $customer = $repository->findBy(array('customerId' => $session->get('zalogowany')));
                 $loginName = $customer[0]->getCustomerName() . " " . $customer[0]->getCustomerSurname();
-
-
                 $place = $request->request->get('place');
-
                 $toDate = $request->request->get('toDate');
                 $carId = $request->get('carId');
                 $repository = $this->getDoctrine()->getRepository('lanoseoBundle:Cars');
                 $car = $repository->findBy(array('carId' => $carId));
-
-
-//        $customerRepo = $this ->getDoctrine()->getRepository('lanoseoBundle:Customers');
-//        $customer = $customerRepo->findAll();
-//        $selectedCustomer = $customer[1];
 
                 $nowDate = new \DateTime();
                 $fromDateOrder = \DateTime::createFromFormat('m/d/Y g:i A', $fromDate);
@@ -351,7 +295,6 @@ class DefaultController extends Controller
                 $order->setOrderPrice(153);
                 $order->setCustomer($customer[0]);
                 $order->setCar($car[0]);
-//dodawanie rekordów!
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($order);
                 $em->flush();
@@ -362,19 +305,14 @@ class DefaultController extends Controller
                 $query->execute();
                 $result = $query->fetchAll();
 
-
-                //obliczanie ceny
-
                 $diff = $fromDateOrder->diff($toDateOrder);
                 $price = 0;
                 $discount = 0;
                 $percentageDiscount = 0;
 
-
                 $query = $con->prepare("SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1");
                 $query->execute();
                 $result = $query->fetchAll();
-
 
                 $anotherQuery = $con->prepare("SELECT COUNT(customer_id) FROM orders WHERE order_to BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE() AND customer_id LIKE " . $session->get('zalogowany'));
                 $anotherQuery->execute();
@@ -385,12 +323,10 @@ class DefaultController extends Controller
                 $futureDate = $currentDate + (60 * 3);
                 $date3min = date("Y-m-d H:i:s", $futureDate);
 
-
                 if ($otherResult[0]["COUNT(customer_id)"] >= 3) {
                     $price = $diff->d * $car[0]->getCarPrice() * 0.8;
                     $discount = $diff->d * $car[0]->getCarPrice() * 0.2;
                     $percentageDiscount = 20;
-
                 } else {
                     if ($diff->d > 7) {
                         $price = $diff->d * $car[0]->getCarPrice() * 0.9;
@@ -407,17 +343,14 @@ class DefaultController extends Controller
                 $anotherQuery = $con->prepare("UPDATE `orders` SET order_price = " . $price . " WHERE order_id=" . $result[0]['order_id']);
                 $anotherQuery->execute();
 
-                    $eventSchedule = $con->prepare("CREATE EVENT order_" . $result[0]['order_id'] . "_user_" . $session->get('zalogowany') . " ON SCHEDULE AT('" . $date3min . "') ON COMPLETION PRESERVE ENABLE DO DELETE FROM e123_pp5.orders WHERE order_id=" . $result[0]['order_id'] . " AND order_payment LIKE 0");
+                $eventSchedule = $con->prepare("CREATE EVENT order_" . $result[0]['order_id'] . "_user_" . $session->get('zalogowany') . " ON SCHEDULE AT('" . $date3min . "') ON COMPLETION PRESERVE ENABLE DO DELETE FROM e123_pp5.orders WHERE order_id=" . $result[0]['order_id'] . " AND order_payment LIKE 0");
                 $eventSchedule->execute();
-
         }} else {
-
             $loginName = "";
             return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/');
         }
 
         return $this->render('lanoseoBundle:Default:summary.html.twig', array(
-
             'percentageDiscount' => $percentageDiscount,
             'discount' => $discount,
             'place' => $place,
@@ -428,7 +361,6 @@ class DefaultController extends Controller
             'price' => $price,
             'customer' => $customer[0],
             'loginName' => $loginName,
-
         ));
     }
 
@@ -436,13 +368,9 @@ class DefaultController extends Controller
     {
         $orderId = $orderRequest->get('orderId');
         $orderRepository = $this->getDoctrine()->getRepository('lanoseoBundle:Orders');
-
         $order = $orderRepository->findBy(array('orderId' => $orderId ));
-
         $customerRepository = $this->getDoctrine()->getRepository('lanoseoBundle:Customers');
-
         $customer = $customerRepository->findBy(array('customerId' => $order[0]->getCustomer() ));
-
         $count = count($order);
 
         if($count == 0) {
@@ -450,7 +378,6 @@ class DefaultController extends Controller
         } elseif($order[0]->getOrderPayment() == 1) {
             return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/reject_payment/'.$orderId);
         } else {
-
             $paymentParams = array(
                 'id' => '725048',
                 'amount' => $order[0]->getOrderPrice(),
@@ -477,7 +404,6 @@ class DefaultController extends Controller
     public function confirmPaymentAction(Request $request)
     {
         $pin = 't5bPAmrw54glSnIGUzGvKi2vaQzWXTfB';
-
         $sign =
             $pin.
             $request->request->get('id').
@@ -515,7 +441,6 @@ class DefaultController extends Controller
     public function logoutAction(Request $request)
     {
         $session = $request->getSession();
-
         if($session->get('zalogowany')) {
             $session->remove('zalogowany');
             return new RedirectResponse('http://v-ie.uek.krakow.pl/~s182019/app_dev.php/');

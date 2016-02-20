@@ -49,10 +49,7 @@
     </div>
 </div>
 
-
-
 <nav class = "navbar navbar-default" role = "navigation">
-
     <div class = "navbar-header">
         <button type = "button" class = "navbar-toggle"
                 data-toggle = "collapse" data-target = "#example-navbar-collapse">
@@ -66,11 +63,15 @@
     </div>
     <div class = "collapse navbar-collapse" id = "example-navbar-collapse">
         <ul class = "nav navbar-nav">
-            <li class = "active"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php">Strona główna</a></li>
-            <li><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/price/asc">Oferta</a></li>
+            {% if app.session.get('zalogowany') %}
+                <li class="text-center visible-xs" style="padding-top: 15px; padding-bottom: 20px;">Zalogowany jako: <strong>{{ loginName }}</strong></li>
+            {% endif %}
+            <li><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php">Strona główna</a></li>
+            <li class="active"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/price/asc">Oferta</a></li>
             <li><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/kontakt">Kontakt</a></li>
             {% if app.session.get('zalogowany') %}
                 <li class="hidden-lg"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/logout">Wyloguj</a></li>
+                <li class="text-center visible-sm visible-md" style="position: absolute; right: 0; padding-right: 15px; padding-top: 15px;">Zalogowany jako: <strong>{{ loginName }}</strong></li>
             {% else %}
                 <li class="hidden-lg"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/login">Zaloguj się</a></li>
                 <li class="hidden-lg"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/register">Zarejestruj się</a></li>
@@ -84,6 +85,7 @@
                 <div class="alert alert-success text-center" role="alert">Twoja rezerwacja przebiegła pomyślnie. Dokonaj płatności aby potwierdzić rezerwację.</div>
             </div>
         </div>
+
         <div class="container" style="margin-bottom: 100px;">
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -127,32 +129,50 @@
 
                             <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/"><button type="submit" class="btn btn-danger">Anuluj</button></a>
                             <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/payment/{{ result[0].order_id }}""><button type="submit" class="btn btn-success">Przejdź do płatności</button></a>
+
                         </div>
                     </div>
 
                     <div class="row hidden-lg">
-                        <div class="col-md-12 text-center">
+                        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
+                            <div class="thumbnail">
                             <img src="{{ asset('bundles/lanoseo/images/cars/500.jpg') }}" alt="Fiat 500" />
+                                </div>
                         </div>
-                        <div class="col-md-12 text-center">
+                        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
                             <br/>
                             <strong>Dane zamawiającego</strong>
-                            <br/>Szymon Pogon
-                            <br/>os. Bohaterów Września 1A m.2
-                            <br/>31-620 Kraków<br/><br/>
+                            <br/>{{ customer.getCustomerName ~ " " ~ customer.getCustomerSurname ~ " "}}  <br>
+                            {{ customer.getCustomerEmail }}<br><br>
+                            <strong>Należny rabat dla zamawiającego</strong>
+                            <br/>{{ percentageDiscount }}%<br><br>
+                            <strong>Miejsce odbioru</strong><br>
+                            {{ place }}<br><br>
+                            <strong>ID zamówienia</strong><br>
+                            {#{% for item in result %}#}
+
+                            {{ result[0].order_id }}
+
+                            {#{% endfor %}#}
+                            <br><br>
                             <strong>Dane zamówienia</strong><br/>
-                            Od: 25.02.2016r. 9:00<br/>
-                            Do: 27.02.2016r. 16:00<br/><br/>
-                            Samochód: Fiat 500<br/>
-                            Segment: A<br/>
-                            Cena za dobę: 89 zł
+                            Od: {{ fromDate }}<br/>
+                            Do: {{ toDate }}<br/><br/>
+
+                            Samochód: {{ car[0].getCarName }}<br/>
+                            Segment: {{ car[0].getCarSegment }}<br/>
+                            Cena za dobę: {{  car[0].getCarPrice  }} zł
                         </div>
-                        <div class="col-md-12 text-center">
+                        <div class="col-md-12 col-sm-12 col-xs-12 text-center">
                             <br/>
                             <strong>Całkowita cena</strong><br/>
-                            <h1>172 zł</h1><br/>
-                            <button type="submit" class="btn btn-danger" style="width: 100%;">Anuluj</button><br/><br/>
-                            <a href=""></a><button type="submit" class="btn btn-success">Przejdź do płatności</button></a>
+                            <h1>{{ price }} zł</h1><br/>
+                            <strong>Rabat wynosi: {{ discount }}zł</strong> <br><br><br>
+
+
+                            <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/"><button style="width: 100%" type="submit" class="btn btn-danger">Anuluj</button></a><br/><br/>
+                            <a href="http://v-ie.uek.krakow.pl/~s182019/app_dev.php/payment/{{ result[0].order_id }}""><button style="width: 100%" type="submit" class="btn btn-success">Przejdź do płatności</button></a>
+
                         </div>
                     </div>
                 </div>

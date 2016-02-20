@@ -18,6 +18,7 @@
     <![endif]-->
 </head>
 <body>
+
 <nav class="navbar navbar-default navbar-fixed-top visible-lg">
     <div class="container">
         <div class="row">
@@ -58,15 +59,19 @@
             <span class = "icon-bar"></span>
         </button>
 
-        <a class = "navbar-brand hidden-lg" href = "#">Lanoseo</a>
+        <a class = "navbar-brand hidden-lg" href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/">Lanoseo</a>
     </div>
     <div class = "collapse navbar-collapse" id = "example-navbar-collapse">
         <ul class = "nav navbar-nav">
-            <li class = "active"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php">Strona główna</a></li>
+            {% if app.session.get('zalogowany') %}
+            <li class="text-center visible-xs" style="padding-top: 15px; padding-bottom: 20px;">Zalogowany jako: <strong>{{ loginName }}</strong></li>
+            {% endif %}
+            <li class = "active"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/">Strona główna</a></li>
             <li><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/lista/price/asc">Oferta</a></li>
             <li><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/kontakt">Kontakt</a></li>
             {% if app.session.get('zalogowany') %}
                 <li class="hidden-lg"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/logout">Wyloguj</a></li>
+                <li class="text-center visible-sm visible-md" style="position: absolute; right: 0; padding-right: 15px; padding-top: 15px;">Zalogowany jako: <strong>{{ loginName }}</strong></li>
             {% else %}
             <li class="hidden-lg"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/login">Zaloguj się</a></li>
             <li class="hidden-lg"><a href = "http://v-ie.uek.krakow.pl/~s182019/app_dev.php/register">Zarejestruj się</a></li>
@@ -86,7 +91,7 @@
         {% for car in cars %}
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="thumbnail">
-                    <img src="{{ asset('bundles/lanoseo/images/cars/' ~ car.car_image) }}" alt="...">
+                    <img src="{{ asset('bundles/lanoseo/images/cars/' ~ car.car_image) }}">
                     <div class="caption text-center">
                         <h3>{{ car.car_name }}</h3>
                         <p>{{'Segment: ' ~ car.car_segment }}</p>
@@ -105,19 +110,19 @@
         </div>
         <div class="panel-body text-center">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <img src="{{ asset('bundles/lanoseo/images/trust_icons/safe96.png') }}" alt="...">
+                <img src="{{ asset('bundles/lanoseo/images/trust_icons/safe96.png') }}">
                 <div class="caption text-center">
                     <p><b>100%</b><br>bezpieczeństwo transakcji</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <img src="{{ asset('bundles/lanoseo/images/trust_icons/trophy96.png') }}" alt="...">
+                <img src="{{ asset('bundles/lanoseo/images/trust_icons/trophy96.png') }}">
                 <div class="caption text-center">
                     <p><b>Pierwsze</b><br>miejsce w rankingu wypożyczalni</p>
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <img src="{{ asset('bundles/lanoseo/images/trust_icons/vip96.png') }}" alt="...">
+                <img src="{{ asset('bundles/lanoseo/images/trust_icons/vip96.png') }}">
                 <div class="caption text-center">
                     <p><b>Zniżki</b><br>dla stałych klientów</p>
                 </div>
